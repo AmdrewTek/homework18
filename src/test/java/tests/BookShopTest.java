@@ -19,19 +19,18 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static tests.TestData.USERNAME;
 import static tests.TestData.isbn;
 
-import static io.qameta.allure.Allure.step;
-import static org.assertj.core.api.Assertions.assertThat;
+
 
 public class BookShopTest extends TestBase {
   @Test
   @WithLogin
-  @DisplayName("Удаление книги из профиля: проверка через API и UI")
+  @DisplayName("Удаление книг из профиля")
   void deleteBookTest() {
     LoginResponseModel auth = step("Авторизация через API", LoginAPI::login);
     String token = auth.getToken();
     String userId = auth.getUserId();
 
-    step("Очистка коллекции пользователя", () ->
+    step("Удаление коллекции", () ->
       BookAPI.deleteAllBooks(token, userId)
     );
 
@@ -39,7 +38,7 @@ public class BookShopTest extends TestBase {
       BookAPI.addBook(token, userId, isbn)
     );
 
-    step("Проверка, что книга добавлена через API", () -> {
+    step("Проверка добавления книги через API", () -> {
       UserBookResponseModel booksResp = BookAPI.getUserBooks(token, userId);
       List<BookModel> userBooks = booksResp.getBooks();
       assertThat(userBooks).extracting(BookModel::getIsbn).contains(isbn);
@@ -54,7 +53,7 @@ public class BookShopTest extends TestBase {
       BookAPI.deleteBook(token, userId, isbn)
     );
 
-    step("Проверка через API, что книга удалена", () -> {
+    step("Проверка удаления книги", () -> {
       UserBookResponseModel booksResp = BookAPI.getUserBooks(token, userId);
       assertThat(booksResp.getBooks()).noneMatch(b -> b.getIsbn().equals(isbn));
     });
