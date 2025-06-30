@@ -33,20 +33,18 @@ public class BookAPI {
     return response.as(AddBookResponseModel.class);
   }
 
-  public static DeleteBookResponseModel deleteBook(String token, String userId, String isbn) {
+  public static void deleteBook(String token, String userId, String isbn) {
     DeleteBookRequestModel requestModel = new DeleteBookRequestModel(isbn, userId);
 
-    Response response = given(request)
+    given(request)
       .header("Authorization", "Bearer " + token)
       .body(requestModel)
       .when()
       .delete("/BookStore/v1/Book")
       .then()
-      .spec(responseSpec(204))
-      .extract().response();
-
-    return response.as(DeleteBookResponseModel.class);
+      .spec(responseSpec(204));
   }
+
 
   public static UserBookResponseModel getUserBooks(String token, String userId) {
     Response response = given(request)
