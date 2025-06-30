@@ -1,7 +1,7 @@
 package api;
 
 import io.restassured.response.Response;
-import models.UserBookResponseModel;
+import models.*;
 
 import static io.restassured.RestAssured.given;
 import static specs.BookSpec.*;
@@ -18,30 +18,34 @@ public class BookAPI {
       .spec(responseSpec(204));
   }
 
-  public static void addBook(String token, String userId, String isbn) {
-    String jsonBody = String.format("{\"userId\":\"%s\",\"collectionOfIsbns\":[{\"isbn\":\"%s\"}]}",
-      userId, isbn);
+  public static AddBookResponseModel addBook(String token, String userId, String isbn) {
+    AddBookRequestModel requestModel = new AddBookRequestModel(userId, isbn);
 
-    given(request)
+    Response response = given(request)
       .header("Authorization", "Bearer " + token)
-      .body(jsonBody)
+      .body(requestModel)
       .when()
       .post("/BookStore/v1/Books")
       .then()
-      .spec(responseSpec(201));
+      .spec(responseSpec(201))
+      .extract().response();
+
+    return response.as(AddBookResponseModel.class);
   }
 
-  public static void deleteBook(String token, String userId, String isbn) {
-    String jsonBody = String.format("{\"isbn\":\"%s\",\"userId\":\"%s\"}",
-      isbn,userId);
+  public static DeleteBookResponseModel deleteBook(String token, String userId, String isbn) {
+    DeleteBookRequestModel requestModel = new DeleteBookRequestModel(isbn, userId);
 
-    given(request)
+    Response response = given(request)
       .header("Authorization", "Bearer " + token)
-      .body(jsonBody)
+      .body(requestModel)
       .when()
       .delete("/BookStore/v1/Book")
       .then()
-      .spec(responseSpec(204));
+      .spec(responseSpec(204))
+      .extract().response();
+
+    return response.as(DeleteBookResponseModel.class);
   }
 
   public static UserBookResponseModel getUserBooks(String token, String userId) {
