@@ -4,7 +4,7 @@ import io.restassured.response.Response;
 import models.*;
 
 import static io.restassured.RestAssured.given;
-import static specs.BookSpec.*;
+import static specs.ApiSpec.*;
 
 public class BookAPI {
 
