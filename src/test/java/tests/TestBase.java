@@ -21,10 +21,13 @@ public class TestBase {
     Configuration.baseUrl = "https://demoqa.com";
     RestAssured.baseURI = "https://demoqa.com";
 
-
     Configuration.browser = System.getProperty("browser", "chrome");
     Configuration.browserVersion = System.getProperty("browserVersion", "127.0");
-    Configuration.remote = System.getProperty("remoteUrl", "https://user1:1234@selenoid.autotests.cloud/wd/hub");
+
+    String remoteUrl = System.getProperty("remoteUrl");
+    if (remoteUrl != null && !remoteUrl.isBlank()) {
+      Configuration.remote = remoteUrl;
+    }
 
     DesiredCapabilities capabilities = new DesiredCapabilities();
     capabilities.setCapability("selenoid:options", Map.of(
@@ -47,5 +50,4 @@ public class TestBase {
     Attach.addVideo();
     closeWebDriver();
   }
-
 }

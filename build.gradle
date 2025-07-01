@@ -41,7 +41,13 @@ dependencies {
 }
 
 tasks.withType(Test) {
+    systemProperties(System.getProperties())
+    systemProperty "file.encoding", "utf-8"
     useJUnitPlatform()
+
+    tasks.withType(JavaCompile) {
+        options.encoding = 'UTF-8'
+    }
 
     systemProperty "USERNAME", System.getProperty("USERNAME")
     systemProperty "PASSWORD", System.getProperty("PASSWORD")
