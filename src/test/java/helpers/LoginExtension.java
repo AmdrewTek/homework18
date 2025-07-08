@@ -1,8 +1,5 @@
 package helpers;
 
-
-import api.LoginAPI;
-
 import models.LoginResponseModel;
 import org.junit.jupiter.api.extension.BeforeEachCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
@@ -15,7 +12,10 @@ public class LoginExtension implements BeforeEachCallback {
 
   @Override
   public void beforeEach(ExtensionContext context) {
-    LoginResponseModel response = LoginAPI.login();
+
+    AuthHelper.refreshToken();
+
+    LoginResponseModel response = AuthHelper.getLoginResponse();
 
     open("/favicon.ico");
     getWebDriver().manage().addCookie(new Cookie("userID", response.getUserId()));

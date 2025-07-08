@@ -1,8 +1,9 @@
 package tests;
 
-import api.BookAPI;
-import api.LoginAPI;
+import api.BookStoreApiSteps;
+import api.AccountApiSteps;
 import com.codeborne.selenide.Selenide;
+import helpers.AuthHelper;
 import helpers.WithLogin;
 import models.BookModel;
 import models.LoginResponseModel;
@@ -26,20 +27,20 @@ public class BookShopTest extends TestBase {
   @WithLogin
   @DisplayName("Удаление книг из профиля")
   void deleteBookTest() {
-    LoginResponseModel auth = step("Авторизация через API", LoginAPI::login);
+    LoginResponseModel auth = step("Авторизация через API", AuthHelper::getLoginResponse);
     String token = auth.getToken();
     String userId = auth.getUserId();
 
     step("Удаление коллекции", () ->
-      BookAPI.deleteAllBooks(token, userId)
+      BookStoreApiSteps.deleteAllBooks(token, userId)
     );
 
     step("Добавление книги через API", () ->
-      BookAPI.addBook(token, userId, isbn)
+      BookStoreApiSteps.addBook(token, userId, isbn)
     );
 
     step("Проверка добавления книги через API", () -> {
-      UserBookResponseModel booksResp = BookAPI.getUserBooks(token, userId);
+      UserBookResponseModel booksResp = AccountApiSteps.getUserBooks(token, userId);
       List<BookModel> userBooks = booksResp.getBooks();
       assertThat(userBooks).extracting(BookModel::getIsbn).contains(isbn);
     });
@@ -50,11 +51,11 @@ public class BookShopTest extends TestBase {
     });
 
     step("Удаление книги через API", () ->
-      BookAPI.deleteBook(token, userId, isbn)
+      BookStoreApiSteps.deleteBook(token, userId, isbn)
     );
 
     step("Проверка удаления книги", () -> {
-      UserBookResponseModel booksResp = BookAPI.getUserBooks(token, userId);
+      UserBookResponseModel booksResp = AccountApiSteps.getUserBooks(token, userId);
       assertThat(booksResp.getBooks()).noneMatch(b -> b.getIsbn().equals(isbn));
     });
 
