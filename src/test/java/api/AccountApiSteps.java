@@ -24,14 +24,13 @@ public class AccountApiSteps {
         .extract().as(LoginResponseModel.class);
   }
   public static UserBookResponseModel getUserBooks(String token, String userId) {
-    Response response = given(request)
+    return
+      given(request)
       .header("Authorization", "Bearer " + token)
       .when()
       .get("/Account/v1/User/" + userId)
       .then()
       .spec(responseSpec(200))
-      .extract().response();
-
-    return response.as(UserBookResponseModel.class);
+      .extract().as(UserBookResponseModel.class);
   }
 }
