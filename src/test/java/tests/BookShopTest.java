@@ -1,7 +1,7 @@
 package tests;
 
-import api.BookStoreApiSteps;
 import api.AccountApiSteps;
+import api.BookStoreApiSteps;
 import com.codeborne.selenide.Selenide;
 import helpers.AuthHelper;
 import helpers.WithLogin;
@@ -13,13 +13,14 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static com.codeborne.selenide.Condition.*;
-import static com.codeborne.selenide.Selenide.*;
+import static com.codeborne.selenide.Condition.text;
+import static com.codeborne.selenide.Condition.visible;
+import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.open;
 import static io.qameta.allure.Allure.step;
 import static org.assertj.core.api.Assertions.assertThat;
 import static tests.TestData.USERNAME;
 import static tests.TestData.isbn;
-
 
 
 public class BookShopTest extends TestBase {

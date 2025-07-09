@@ -5,7 +5,8 @@ import models.AddBookResponseModel;
 import models.DeleteBookRequestModel;
 
 import static io.restassured.RestAssured.given;
-import static specs.ApiSpec.*;
+import static specs.ApiSpec.request;
+import static specs.ApiSpec.responseSpec;
 
 public class BookStoreApiSteps {
 
@@ -23,13 +24,13 @@ public class BookStoreApiSteps {
     AddBookRequestModel requestModel = new AddBookRequestModel(userId, isbn);
     return
       given(request)
-      .header("Authorization", "Bearer " + token)
-      .body(requestModel)
-      .when()
-      .post("/BookStore/v1/Books")
-      .then()
-      .spec(responseSpec(201))
-      .extract().as(AddBookResponseModel.class);
+        .header("Authorization", "Bearer " + token)
+        .body(requestModel)
+        .when()
+        .post("/BookStore/v1/Books")
+        .then()
+        .spec(responseSpec(201))
+        .extract().as(AddBookResponseModel.class);
   }
 
   public static void deleteBook(String token, String userId, String isbn) {
